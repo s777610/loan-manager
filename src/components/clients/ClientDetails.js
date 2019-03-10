@@ -18,6 +18,7 @@ class ClientDetails extends Component {
     });
   };
 
+  // Update balance
   balanceSubmit = e => {
     e.preventDefault();
 
@@ -32,6 +33,15 @@ class ClientDetails extends Component {
     // Update in firestore
     firestore.update({ collection: "clients", doc: client.id }, clientUpdate);
     this.setState({ balanceUpdateAmount: "" });
+  };
+
+  // Delete Client
+  onDeleteClick = () => {
+    const { client, firestore, history } = this.props;
+
+    firestore
+      .delete({ collection: "clients", doc: client.id })
+      .then(() => history.push("/"));
   };
 
   render() {
@@ -80,7 +90,9 @@ class ClientDetails extends Component {
                 <Link to={`/client/edit/${client.id}`} className="btn btn-dark">
                   Edit
                 </Link>
-                <button className="btn btn-danger">Delete</button>
+                <button onClick={this.onDeleteClick} className="btn btn-danger">
+                  Delete
+                </button>
               </div>
             </div>
           </div>
@@ -108,8 +120,8 @@ class ClientDetails extends Component {
                     ${parseFloat(client.balance).toFixed(2)}
                   </span>{" "}
                   <small>
-                    <a
-                      href="#"
+                    <span
+                      style={{ cursor: "pointer", color: "blue" }}
                       onClick={() =>
                         this.setState({
                           showBalanceUpdate: !this.state.showBalanceUpdate
@@ -117,7 +129,7 @@ class ClientDetails extends Component {
                       }
                     >
                       <i className="fas fa-pencil-alt" />
-                    </a>
+                    </span>
                   </small>
                 </h3>
                 {balanceForm}
