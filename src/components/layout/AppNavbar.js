@@ -1,9 +1,22 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { firebaseConnect } from "react-redux-firebase";
 
 class AppNavbar extends Component {
-  state = {};
+  onLogoutClick = e => {
+    e.preventDefault();
+
+    const { firebase } = this.props;
+    firebase.logout();
+  };
+
   render() {
+    const { auth } = this.props;
+    const style = { cursor: "pointer" };
+
     return (
       <nav className="navbar navbar-expand-md navbar-dark bg-primary mb-4">
         <div className="container">
@@ -20,12 +33,32 @@ class AppNavbar extends Component {
           </button>
           <div className="collapse navbar-collapse" id="navbarMain">
             <ul className="navbar-nav mr-auto">
-              <li className="nav-item">
-                <Link to="/" className="nav-link">
-                  Dashboard
-                </Link>
-              </li>
+              {auth.uid ? (
+                <li className="nav-item">
+                  <Link to="/" className="nav-link">
+                    Dashboard
+                  </Link>
+                </li>
+              ) : null}
             </ul>
+            {auth.uid ? (
+              <ul className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <div style={style} className="nav-link">
+                    {auth.email}
+                  </div>
+                </li>
+                <li className="nav-item">
+                  <div
+                    style={style}
+                    className="nav-link"
+                    onClick={this.onLogoutClick}
+                  >
+                    Logout
+                  </div>
+                </li>
+              </ul>
+            ) : null}
           </div>
         </div>
       </nav>
@@ -33,4 +66,14 @@ class AppNavbar extends Component {
   }
 }
 
-export default AppNavbar;
+AppNavbar.propTypes = {
+  firebase: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired
+};
+
+export default compose(
+  firebaseConnect(),
+  connect((state, props) => ({
+    auth: state.firebase.auth
+  }))
+)(AppNavbar);
