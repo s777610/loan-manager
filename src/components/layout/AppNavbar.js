@@ -71,9 +71,13 @@ AppNavbar.propTypes = {
   auth: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => {
+  return {
+    auth: state.firebase.auth
+  };
+};
+
 export default compose(
   firebaseConnect(),
-  connect((state, props) => ({
-    auth: state.firebase.auth
-  }))
+  connect(mapStateToProps)
 )(AppNavbar);
