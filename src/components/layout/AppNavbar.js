@@ -49,6 +49,12 @@ class AppNavbar extends Component {
                   </div>
                 </li>
                 <li className="nav-item">
+                  <Link to="/settings" className="nav-link">
+                    Settings
+                  </Link>
+                </li>
+
+                <li className="nav-item">
                   <div
                     style={style}
                     className="nav-link"
@@ -68,12 +74,14 @@ class AppNavbar extends Component {
 
 AppNavbar.propTypes = {
   firebase: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  settings: PropTypes.object.isRequired
 };
 
 const mapStateToProps = state => {
   return {
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    settings: state.settings
   };
 };
 
