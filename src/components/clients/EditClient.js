@@ -45,6 +45,7 @@ class EditClient extends Component {
   render() {
     const { client } = this.props;
     const { firstName, lastName, phone, email, balance } = this.state;
+    const { disableBalanceOnEdit } = this.props.settings;
 
     if (client) {
       return (
@@ -119,6 +120,7 @@ class EditClient extends Component {
                     name="balance"
                     onChange={this.onChange}
                     value={balance}
+                    disabled={disableBalanceOnEdit}
                   />
                 </div>
 
@@ -142,12 +144,16 @@ EditClient.propTypes = {
   firestore: PropTypes.object.isRequired
 };
 
+const mapStateToProps = state => {
+  return {
+    client: state.firestore.ordered.client && state.firestore.ordered.client[0],
+    settings: state.settings
+  };
+};
+
 export default compose(
   firestoreConnect(props => [
     { collection: "clients", storeAs: "client", doc: props.match.params.id }
   ]),
-  // { firestore: { ordered } } is state
-  connect(({ firestore: { ordered } }, props) => ({
-    client: ordered.client && ordered.client[0] // if client exists get first element
-  }))
+  connect(mapStateToProps)
 )(EditClient);
