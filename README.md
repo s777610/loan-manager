@@ -1,4 +1,4 @@
-# connectly-full-stack
+# Loan Manager
 This application([Loan Manager](https://reactclientpanel-57599.firebaseapp.com/login?redirect=%2Fsettings)) was mainly built by React, Redux and Firebase. One the back-end, it uses firebase service to create the serverless application. The data is stored on firebase and the app is hosted on firebase. On the front end, I use react and redux to create an interactive web page. It uses react-redux-firebase as the library to manipulate the state. It is very useful for me to remember who own me money.
 
 
